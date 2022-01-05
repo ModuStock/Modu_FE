@@ -1,29 +1,21 @@
-const path = require('path'); 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const RefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
-  entry: './src/index.js',
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'app.js',
-    publicPath: './'
-  },
+  mode: 'development', 
+  devtool: 'eval',
   resolve: {
     extensions: ['.js', '.jsx']
   },
+
+  entry: {
+    app: ['/src'],
+  }, 
   module: {
     rules: [
       {
         test: /\.css$/,
         use: [ 'style-loader', 'css-loader' ]
-      },
-      { 
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        },
       },
       { 
         test: /\.html$/,
@@ -36,21 +28,37 @@ module.exports = {
           },
         ],
       },
-    ],
+      {
+      test: /\.jsx?$/,
+      loader: 'babel-loader',
+      options: {
+        presets: [
+          ['@babel/preset-env', {
+            targets: {
+              browsers: ['> 1% in KR'], // browserslist
+            },
+            debug: true,
+          }],
+          '@babel/preset-react',
+        ],
+        plugins: [
+          '@babel/plugin-proposal-class-properties',
+          'react-refresh/babel',
+        ],
+      },
+    }],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: 'public/index.html',
-    })
+    new RefreshWebpackPlugin()
   ],
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'app.js',
+    publicPath: '/dist/',
+  },
   devServer: {
-    static : {
-      directory : path.join(__dirname, "dist")
-    },
-    port: 3000,
-    devMiddleware:{
-      publicPath: "https://localhost:3000/dist/",
-    },
-    hot: "only",
+    devMiddleware: { publicPath: '/dist' },
+    static: { directory: path.resolve(__dirname) },
+    hot: true
   },
 };
