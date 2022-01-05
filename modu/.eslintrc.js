@@ -1,27 +1,20 @@
-export default {
-    "parserOptions": {
-        "ecmaVersion": 13,
-        "sourceType": "module"
+module.exports = {
+  env: {
+    browser: true,
+    es6: true,
+  },
+  extends: ["plugin:react/recommended", "airbnb"],
+  globals: {
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly",
+  },
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    env: {
-        "browser": true,
-        "es2021": true
-    },
-    extends: ["eslint:recommended", 'airbnb', 'prettier'],
-    plugins: ['prettier'],
-    "rules": {
-        'prettier/prettier': [
-            'error',
-            {
-                singleQuote: true,
-                semi: true,
-                useTabs: false,
-                tabWidth: 2,
-                trailingComma: 'all',
-                printWidth: 100,
-                arrowParens: 'avoid',
-                endOfLine: 'auto',
-            },
-        ],
-    }
+    ecmaVersion: 2018,
+    sourceType: "module",
+  },
+  plugins: ["react"],
+  rules: {},
 };
